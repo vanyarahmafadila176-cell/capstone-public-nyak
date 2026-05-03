@@ -2,7 +2,8 @@ import { useState } from 'react'
 
 const initialForm = {
   reporterName: '',
-  type: '',
+  phone: '',
+  category: '',
   address: '',
   title: '',
   description: '',
@@ -14,7 +15,8 @@ function ReportPage({ onSubmit, onBack }) {
 
   const isComplete =
     form.reporterName.trim() &&
-    form.type.trim() &&
+    form.phone.trim() &&
+    form.category.trim() &&
     form.address.trim() &&
     form.title.trim() &&
     form.description.trim() &&
@@ -26,17 +28,20 @@ function ReportPage({ onSubmit, onBack }) {
 
     onSubmit({
       reporterName: form.reporterName,
+      phone: form.phone,
+      category: form.category,
       title: form.title,
       place: form.address,
-      type: form.type,
       description: form.description,
       evidence: form.fileName,
     })
+
     setForm(initialForm)
   }
 
   return (
     <form className="screen" onSubmit={handleSubmit}>
+      {/* HEADER */}
       <div className="top-row">
         <button className="icon-btn" type="button" onClick={onBack}>
           {'<'}
@@ -44,61 +49,101 @@ function ReportPage({ onSubmit, onBack }) {
         <h2>Buat Laporan</h2>
       </div>
 
+      {/* FORM TABLE */}
       <div className="report-table">
+
+        {/* Nama */}
         <div className="table-row">
           <label>Nama Pelapor</label>
           <input
             className="field"
-            placeholder="Masukkan nama pelapor"
+            placeholder="Masukkan nama anda"
             value={form.reporterName}
             onChange={(event) =>
-              setForm((prev) => ({ ...prev, reporterName: event.target.value }))
+              setForm((prev) => ({
+                ...prev,
+                reporterName: event.target.value,
+              }))
             }
             required
           />
         </div>
+
+      {/* Alamat */}
         <div className="table-row">
-          <label>Jenis Laporan</label>
+          <label>Alamat Lengkap</label>
           <input
             className="field"
-            placeholder="Contoh: Infrastruktur"
-            value={form.type}
-            onChange={(event) => setForm((prev) => ({ ...prev, type: event.target.value }))}
-            required
-          />
-        </div>
-        <div className="table-row">
-          <label>Alamat</label>
-          <input
-            className="field"
-            placeholder="Masukkan alamat lokasi"
+            placeholder="Masukkan alamat lengkap anda"
             value={form.address}
-            onChange={(event) => setForm((prev) => ({ ...prev, address: event.target.value }))}
+            onChange={(event) =>
+              setForm((prev) => ({
+                ...prev,
+                address: event.target.value,
+              }))
+            }
             required
           />
         </div>
+
+        {/* Nomor Telepon */}
         <div className="table-row">
-          <label>Judul Laporan</label>
+          <label>Nomor Telepon</label>
           <input
             className="field"
-            placeholder="Masukkan judul laporan"
-            value={form.title}
-            onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
+            placeholder="Masukkan nomor telepon anda"
+            value={form.phone}
+            onChange={(event) =>
+              setForm((prev) => ({
+                ...prev,
+                phone: event.target.value,
+              }))
+            }
             required
           />
         </div>
+
+        {/* Kategori */}
+        <div className="table-row">
+          <label>Kategori Laporan</label>
+          <select
+            className="field"
+            value={form.category}
+            onChange={(event) =>
+              setForm((prev) => ({
+                ...prev,
+                category: event.target.value,
+              }))
+            }
+            required
+          >
+            <option value="">Pilih kategori laporan</option>
+            <option value="Infrastruktur">Infrastruktur</option>
+            <option value="Kebersihan">Kebersihan</option>
+            <option value="Keamanan">Keamanan</option>
+            <option value="Layanan Publik">Layanan Publik</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+
+        {/* Deskripsi */}
         <div className="table-row textarea-row">
           <label>Deskripsi</label>
           <textarea
             className="field area"
-            placeholder="Tulis detail laporan..."
+            placeholder="Masukkan laporan anda"
             value={form.description}
             onChange={(event) =>
-              setForm((prev) => ({ ...prev, description: event.target.value }))
+              setForm((prev) => ({
+                ...prev,
+                description: event.target.value,
+              }))
             }
             required
           />
         </div>
+
+        {/* Dokumentasi */}
         <div className="table-row">
           <label>Dokumentasi</label>
           <input
@@ -116,7 +161,12 @@ function ReportPage({ onSubmit, onBack }) {
         </div>
       </div>
 
-      <button className="btn primary full" type="submit" disabled={!isComplete}>
+      {/* BUTTON */}
+      <button
+        className="btn primary full"
+        type="submit"
+        disabled={!isComplete}
+      >
         Kirim Laporan
       </button>
     </form>
