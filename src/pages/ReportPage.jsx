@@ -8,6 +8,7 @@ const initialForm = {
   title: '',
   description: '',
   fileName: '',
+  photo: '',
 }
 
 function ReportPage({ onSubmit, onBack }) {
@@ -24,7 +25,11 @@ function ReportPage({ onSubmit, onBack }) {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    if (!isComplete) return
+
+    if (!isComplete) {
+      alert('Semua field wajib diisi!')
+      return
+    }
 
     onSubmit({
       reporterName: form.reporterName,
@@ -34,6 +39,7 @@ function ReportPage({ onSubmit, onBack }) {
       place: form.address,
       description: form.description,
       evidence: form.fileName,
+      photo: form.photo,
     })
 
     setForm(initialForm)
@@ -41,20 +47,27 @@ function ReportPage({ onSubmit, onBack }) {
 
   return (
     <form className="screen" onSubmit={handleSubmit}>
+      
       {/* HEADER */}
       <div className="top-row">
-        <button className="icon-btn" type="button" onClick={onBack}>
+        <button
+          className="icon-btn"
+          type="button"
+          onClick={onBack}
+        >
           {'<'}
         </button>
+
         <h2>Buat Laporan</h2>
       </div>
 
-      {/* FORM TABLE */}
+      {/* FORM */}
       <div className="report-table">
 
         {/* Nama */}
         <div className="table-row">
           <label>Nama Pelapor</label>
+
           <input
             className="field"
             placeholder="Masukkan nama anda"
@@ -69,9 +82,10 @@ function ReportPage({ onSubmit, onBack }) {
           />
         </div>
 
-      {/* Alamat */}
+        {/* Alamat */}
         <div className="table-row">
           <label>Alamat Lengkap</label>
+
           <input
             className="field"
             placeholder="Masukkan alamat lengkap anda"
@@ -89,6 +103,7 @@ function ReportPage({ onSubmit, onBack }) {
         {/* Nomor Telepon */}
         <div className="table-row">
           <label>Nomor Telepon</label>
+
           <input
             className="field"
             placeholder="Masukkan nomor telepon anda"
@@ -103,9 +118,28 @@ function ReportPage({ onSubmit, onBack }) {
           />
         </div>
 
+        {/* Judul */}
+        <div className="table-row">
+          <label>Judul Laporan</label>
+
+          <input
+            className="field"
+            placeholder="Masukkan judul laporan"
+            value={form.title}
+            onChange={(event) =>
+              setForm((prev) => ({
+                ...prev,
+                title: event.target.value,
+              }))
+            }
+            required
+          />
+        </div>
+
         {/* Kategori */}
         <div className="table-row">
           <label>Kategori Laporan</label>
+
           <select
             className="field"
             value={form.category}
@@ -117,18 +151,36 @@ function ReportPage({ onSubmit, onBack }) {
             }
             required
           >
-            <option value="">Pilih kategori laporan</option>
-            <option value="Infrastruktur">Infrastruktur</option>
-            <option value="Kebersihan">Kebersihan</option>
-            <option value="Keamanan">Keamanan</option>
-            <option value="Layanan Publik">Layanan Publik</option>
-            <option value="Lainnya">Lainnya</option>
+            <option value="">
+              Pilih kategori laporan
+            </option>
+
+            <option value="Infrastruktur">
+              Infrastruktur
+            </option>
+
+            <option value="Kebersihan">
+              Kebersihan
+            </option>
+
+            <option value="Keamanan">
+              Keamanan
+            </option>
+
+            <option value="Layanan Publik">
+              Layanan Publik
+            </option>
+
+            <option value="Lainnya">
+              Lainnya
+            </option>
           </select>
         </div>
 
         {/* Deskripsi */}
         <div className="table-row textarea-row">
           <label>Deskripsi</label>
+
           <textarea
             className="field area"
             placeholder="Masukkan laporan anda"
@@ -146,19 +198,49 @@ function ReportPage({ onSubmit, onBack }) {
         {/* Dokumentasi */}
         <div className="table-row">
           <label>Dokumentasi</label>
+
           <input
             className="field file-input"
             type="file"
             accept="image/*"
-            onChange={(event) =>
-              setForm((prev) => ({
-                ...prev,
-                fileName: event.target.files?.[0]?.name || '',
-              }))
-            }
             required
+            onChange={(event) => {
+              const file =
+                event.target.files?.[0]
+
+              if (file) {
+                const imageUrl =
+                  URL.createObjectURL(file)
+
+                setForm((prev) => ({
+                  ...prev,
+                  fileName: file.name,
+                  photo: imageUrl,
+                }))
+              }
+            }}
           />
         </div>
+
+        {/* Preview Foto */}
+        {form.photo && (
+          <div
+            style={{
+              padding: '14px',
+              textAlign: 'center',
+            }}
+          >
+            <img
+              src={form.photo}
+              alt="Preview"
+              style={{
+                width: '220px',
+                borderRadius: '12px',
+              }}
+            />
+          </div>
+        )}
+
       </div>
 
       {/* BUTTON */}
