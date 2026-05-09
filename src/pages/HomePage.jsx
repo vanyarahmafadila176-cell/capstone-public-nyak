@@ -150,7 +150,7 @@ function HomePage({
                 "10px",
             }}
           >
-            Tidak ada hasil 😢
+            Tidak ada hasil
           </p>
         )}
       </section>
